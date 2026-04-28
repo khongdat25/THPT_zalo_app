@@ -1,6 +1,6 @@
 module.exports = {
   darkMode: ["selector", '[zaui-theme="dark"]'],
-  purge: {
+  content: {
     enabled: true,
     content: ['./src/**/*.{js,jsx,ts,tsx,vue}'],
   },

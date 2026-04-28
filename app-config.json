@@ -10,6 +10,16 @@
     "hideIOSSafeAreaBottom": true,
     "hideAndroidBottomNavigationBar": false
   },
+  "pages": [
+    "pages/index",
+    "pages/quiz1",
+    "pages/quiz2",
+    "pages/quiz2_1",
+    "pages/quiz2_2",
+    "pages/quiz2_3",
+    "pages/thanks",
+    "pages/welcome"
+  ],
   "listCSS": [],
   "listSyncJS": [],
   "listAsyncJS": []
