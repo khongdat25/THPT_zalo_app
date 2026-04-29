@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Page, useNavigate, Icon } from "zmp-ui";
+
+// IMPORT API CỦA ZALO VÀ BỘ NHỚ TẠM
+import { getPhoneNumber } from "zmp-sdk/apis";
+import { globalFormMemory } from "../hooks/useFormState";
 
 import mascotImg from "../static/images/Mascot Hito_9 1.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
@@ -15,6 +19,43 @@ const HomePage = () => {
     { label: "Website chính thức", img: iconWeb, reverse: true, path: "/web" },
     { label: "Kiểm tra thần số học", img: iconUser, reverse: false, path: "/numerology" },
   ];
+
+  // ====================================================================
+  // HÀM TỰ ĐỘNG XIN QUYỀN VÀ LẤY SỐ ĐIỆN THOẠI KHI MỞ APP
+  // ====================================================================
+  // globalFormMemory["user_phone"] = "0987654321";
+  useEffect(() => {
+    const fetchZaloPhoneNumber = async () => {
+      try {
+        // 1. Xin quyền lấy SĐT (Sẽ hiện popup cho người dùng xác nhận)
+        const { token } = await getPhoneNumber();
+        
+        if (token) {
+          // 2. Bắn token xuống Backend Node.js để giải mã
+          // LƯU Ý: Đổi "https://domain-backend-cua-ban.com" thành link thật của Backend
+          const response = await fetch("https://domain-backend-cua-ban.com/decode-phone", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ accessToken: token, code: token }) 
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.phone) {
+            // 3. Cất số điện thoại lấy được vào bộ nhớ tạm toàn cục
+            globalFormMemory["user_phone"] = data.phone;
+            console.log("Đã lưu SĐT thành công:", data.phone);
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy số điện thoại Zalo:", error);
+      }
+    };
+
+    fetchZaloPhoneNumber();
+  }, []);
 
   return (
     <Page className="relative p-0 m-0 overflow-hidden font-['Be_Vietnam_Pro'] min-h-screen flex flex-col">
