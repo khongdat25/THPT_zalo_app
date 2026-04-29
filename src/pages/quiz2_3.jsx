@@ -51,7 +51,7 @@ const Quiz2_3Page = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3003/api/khao-sat/submit", {
+      const response = await fetch("https://api.hto.edu.vn/api/khao-sat/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
