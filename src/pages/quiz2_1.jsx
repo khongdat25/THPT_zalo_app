@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // Nhớ import thêm Icon
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 
-import mascotThinkingImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotThinkingImg from "../static/images/sticker_hito_15 1.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz2_1Page = () => {
@@ -51,7 +51,7 @@ const Quiz2_1Page = () => {
 
         {/* Mascot Area */}
         <div className="flex justify-center items-end pt-20 -mb-10 relative z-0 pointer-events-none">
-          <div className="w-48 md:w-56">
+          <div className="w-52 md:w-60">
              <img src={mascotThinkingImg} className="w-full h-auto object-contain object-bottom drop-shadow-lg" alt="mascot suy nghĩ" />
           </div>
         </div>
@@ -63,7 +63,7 @@ const Quiz2_1Page = () => {
             {/* Khung câu hỏi (Glassmorphism Effect) */}
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-8 shadow-inner mb-6 flex items-center justify-center min-h-[140px]">
               <h2 className="text-[28px] md:text-[30px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
-                Sau tốt nghiệp, bạn dự định học tập ở đâu?
+                Sau tốt nghiệp, bạn dự định <br /> học tập ở đâu?
               </h2>
             </div>
 

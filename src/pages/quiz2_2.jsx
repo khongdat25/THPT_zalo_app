@@ -2,7 +2,7 @@ import { useFormState, globalFormMemory } from "../hooks/useFormState";
 import React, { useState } from "react";
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 // Lưu ý: Đổi tên file ảnh mascot đội mũ cử nhân cho đúng với source của bạn
-import mascotGradImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotGradImg from "../static/images/Mascot Hito_2 1.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz2_2Page = () => {
@@ -143,7 +143,7 @@ const Quiz2_2Page = () => {
             {/* Box Câu hỏi (Glassmorphism) */}
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-6 shadow-inner mb-8 flex items-center justify-center min-h-[110px]">
               <h2 className="text-[22px] md:text-[24px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
-                Bạn chọn hệ đào tạo nào,<br/>ngành bạn quan tâm là gì?
+                Bạn chọn <br /> hệ đào tạo nào,<br/>ngành bạn quan tâm <br />là gì?
               </h2>
             </div>
 
@@ -229,7 +229,7 @@ const Quiz2_2Page = () => {
             </div>
             {/* Box Text Trong suốt */}
             <div className="flex-1 bg-white/30 backdrop-blur-xl py-[14px] px-4 rounded-r-xl border border-white/50 text-white font-medium text-[15px] ml-[-2px] tracking-wide text-center">
-              0866 934 579 <span className="opacity-70 mx-1">-</span> 0334 585 198
+              Liên hệ tại: <span className="opacity-70 mx-1"></span>1800 9078
             </div>
           </div>
         </div>
