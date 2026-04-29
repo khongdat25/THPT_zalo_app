@@ -7,7 +7,6 @@ import bgIndex from "../static/images/bg_home1.png";
 
 const Quiz2Page = () => {
   const navigate = useNavigate();
-  const { formData, setFormData } = useFormState();
   
   // State quản lý lựa chọn tổ hợp
   const [selectedBlock, setSelectedBlock] = useFormState("selectedBlock", null);

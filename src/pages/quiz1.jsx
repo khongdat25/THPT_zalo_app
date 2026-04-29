@@ -54,12 +54,12 @@ const Quiz1Page = () => {
     // 1. Kiểm tra xem có ô nào bị bỏ trống không (loại bỏ khoảng trắng 2 đầu bằng .trim())
     if (!name.trim() || !email.trim() || !provinceInput.trim() || !schoolInput.trim() || !className.trim()) {
       alert("Vui lòng điền đầy đủ các thông tin cá nhân!");
-      return; // Dừng lại, không chạy code bên dưới
+      return; 
     }
 
-    // 2. Kiểm tra định dạng Email sơ bộ (tùy chọn nhưng nên có)
+    // 2. Kiểm tra định dạng Email sơ bộ
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.trim())) {
       alert("Định dạng Email không hợp lệ!");
       return;
     }
@@ -94,7 +94,6 @@ const Quiz1Page = () => {
           <Icon icon="zi-chevron-left" className="text-[#11397b] text-xl font-black pr-0.5" />
         </div>
         
-        {/* Đã thay đổi: Gọi hàm handleNext thay vì navigate thẳng */}
         <div onClick={handleNext} className="w-10 h-10 bg-white/70 backdrop-blur-md shadow-sm border border-white/50 rounded-full flex items-center justify-center cursor-pointer active:scale-90 transition-transform">
           <Icon icon="zi-chevron-right" className="text-[#11397b] text-xl font-black pl-0.5" />
         </div>
@@ -150,9 +149,9 @@ const Quiz1Page = () => {
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Tỉnh thành</legend>
                 <div className="absolute inset-0 top-3 cursor-pointer z-10" onClick={() => setIsProvinceOpen(!isProvinceOpen)}></div>
                 <input 
-                  type="text"
-                  value={provinceInput}
-                  readOnly
+                  type="text" 
+                  value={provinceInput} 
+                  readOnly 
                   placeholder="Chọn tỉnh thành..." 
                   className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-6 relative z-0 pointer-events-none" 
                 />
@@ -171,10 +170,10 @@ const Quiz1Page = () => {
               <fieldset className="border-2 border-[#11397b] rounded-xl px-3 pb-1 relative bg-white z-40">
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Trường</legend>
                 <input 
-                  type="text"
-                  value={schoolInput}
-                  onChange={(e) => setSchoolInput(e.target.value)}
-                  onClick={() => setIsSchoolOpen(true)}
+                  type="text" 
+                  value={schoolInput} 
+                  onChange={(e) => setSchoolInput(e.target.value)} 
+                  onClick={() => setIsSchoolOpen(true)} 
                   placeholder="Nhập hoặc chọn trường..." 
                   className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-8 relative z-10" 
                 />
@@ -203,16 +202,13 @@ const Quiz1Page = () => {
                     className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1" 
                   />
                 </fieldset>
-
                 <button onClick={() => setGender("Nam")} className={`flex-1 rounded-xl font-bold transition-all shadow-sm ${gender === "Nam" ? "bg-[#003570] text-white" : "bg-gray-100 text-gray-400"}`}>Nam</button>
                 <button onClick={() => setGender("Nữ")} className={`flex-1 rounded-xl font-bold transition-all shadow-sm ${gender === "Nữ" ? "bg-[#ffadad] text-white" : "bg-gray-100 text-gray-400"}`}>Nữ</button>
               </div>
 
-              {/* Đã thay đổi: Gọi hàm handleNext */}
               <button onClick={handleNext} className="w-full py-4 bg-[#003570] text-white text-lg font-bold rounded-2xl shadow-xl active:scale-95 transition-all mt-2 relative z-10">
                 Tiếp tục
               </button>
-
             </div>
           </div>
         </div>
@@ -223,7 +219,6 @@ const Quiz1Page = () => {
           </div>
           <span className="text-[#11397b] text-sm font-semibold cursor-pointer" onClick={() => setIsAgreed(!isAgreed)}>Tôi đồng ý sử dụng thông tin cho bài khảo sát</span>
         </div>
-
       </div>
     </Page>
   );

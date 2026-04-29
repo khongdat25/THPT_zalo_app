@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-// Bộ nhớ tạm toàn cục (Sẽ tự động bị xóa trắng khi Reload web)
-const globalFormMemory = {};
+// ĐÃ THÊM EXPORT Ở ĐÂY ĐỂ CÁC FILE KHÁC CÓ THỂ NHÌN THẤY
+export const globalFormMemory = {};
 
 export const useFormState = (key, initialValue) => {
   // 1. Kiểm tra xem trong bộ nhớ tạm đã có dữ liệu của ô này chưa

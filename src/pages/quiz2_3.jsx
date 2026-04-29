@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
-import { useFormState } from "../hooks/useFormState";
-// Lưu ý: Đổi tên file ảnh mascot du học (xách vali) cho đúng với source của bạn
+import { useFormState, globalFormMemory } from "../hooks/useFormState";
+
 import mascotStudyAbroadImg from "../static/images/Mascot Hito_9 1.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
@@ -9,30 +9,67 @@ const Quiz2_3Page = () => {
   const navigate = useNavigate();
   
   // --- States cho Quốc gia ---
-  const [country, setCountry] = useFormState("country", "");
-  const [isCountryOpen, setIsCountryOpen] = useFormState("isCountryOpen", false);
+  const [studyCountry, setStudyCountry] = useFormState("q3_studyCountry", "");
+  const [isCountryOpen, setIsCountryOpen] = useFormState("q3_isCountryOpen", false);
   const countryOptions = ["Mỹ", "Nhật Bản", "Hàn Quốc", "Úc", "Canada", "Anh", "Singapore", "Khác"];
 
   // --- States cho Ngành học ---
-  const [major, setMajor] = useFormState("major", "");
-  const [isMajorOpen, setIsMajorOpen] = useFormState("isMajorOpen", false);
+  const [major, setMajor] = useFormState("q3_major", "");
+  const [isMajorOpen, setIsMajorOpen] = useFormState("q3_isMajorOpen", false);
   const majorOptions = ["Kinh tế", "Kỹ thuật", "Công nghệ thông tin (IT)", "Y Dược", "Nghệ thuật - Thiết kế", "Khác"];
 
   // State Modal xác nhận
-  const [isConfirmVisible, setIsConfirmVisible] = useFormState("isConfirmVisible", false);
+  const [isConfirmVisible, setIsConfirmVisible] = useFormState("q3_isConfirmVisible", false);
 
   // Xử lý Ghi nhận
   const handleRecord = () => {
-    if (!country || !major) {
+    if (!studyCountry || !major) {
       alert("Vui lòng nhập/chọn đầy đủ Quốc gia và Ngành học!");
       return;
     }
     setIsConfirmVisible(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsConfirmVisible(false);
-    navigate("/thanks"); // Đổi thành trang đích tiếp theo (ví dụ trang Cảm ơn)
+
+    // 1. Gom toàn bộ dữ liệu từ các bước trước
+    const payload = {
+      name: globalFormMemory["q1_name"] || "",
+      email: globalFormMemory["q1_email"] || "",
+      gender: globalFormMemory["q1_gender"] || "",
+      province: globalFormMemory["q1_province"] || "",
+      school: globalFormMemory["q1_school"] || "",
+      className: globalFormMemory["q1_class"] || "",
+      selectedBlock: globalFormMemory["selectedBlock"] || "",
+      pathway: "Ngoài nước (Du học)", 
+      
+      // BIẾN QUỐC GIA ĐÃ ĐƯỢC CHUẨN HÓA THÀNH studyCountry
+      studyCountry: studyCountry,  
+      major: major,
+      phone: globalFormMemory["user_phone"] || "0987654321",
+    };
+
+    try {
+      const response = await fetch("https://api.hto.edu.vn/api/khao-sat/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        navigate("/thanks");
+      } else {
+        alert("Lỗi: " + result.message);
+      }
+    } catch (error) {
+      alert("Không thể kết nối đến máy chủ Backend!");
+      console.error(error);
+    }
   };
 
   // SVG Icon Tam giác Dropdown
@@ -52,21 +89,16 @@ const Quiz2_3Page = () => {
     </div>
   );
 
-  // Xử lý đóng các dropdown khác khi click
-  const toggleCountry = () => { setIsCountryOpen(true); setIsMajorOpen(false); };
-  const toggleMajor = () => { setIsMajorOpen(true); setIsCountryOpen(false); };
+  const toggleCountry = () => { setIsCountryOpen(!isCountryOpen); setIsMajorOpen(false); };
+  const toggleMajor = () => { setIsMajorOpen(!isMajorOpen); setIsCountryOpen(false); };
 
   return (
     <Page className="relative p-0 m-0 overflow-hidden font-['Be_Vietnam_Pro'] min-h-screen flex flex-col">
-      
-      {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <img src={bgIndex} alt="Background" className="w-full h-full object-cover" />
       </div>
 
-      {/* ================= NÚT ĐIỀU HƯỚNG NỔI ================= */}
       <div className="absolute top-[42px] left-0 w-full px-4 flex justify-between z-[100]">
-        {/* Nút Trở về */}
         <div 
           onClick={() => navigate(-1)} 
           className="w-10 h-10 bg-white/70 backdrop-blur-md shadow-sm border border-white/50 rounded-full flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
@@ -74,7 +106,6 @@ const Quiz2_3Page = () => {
           <Icon icon="zi-chevron-left" className="text-[#11397b] text-xl font-black pr-0.5" />
         </div>
 
-        {/* Nút Tiếp theo (Gọi hàm handleRecord để validate trước khi đi tiếp) */}
         <div 
           onClick={handleRecord} 
           className="w-10 h-10 bg-white/70 backdrop-blur-md shadow-sm border border-white/50 rounded-full flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
@@ -84,8 +115,6 @@ const Quiz2_3Page = () => {
       </div>
 
       <div className="flex flex-col h-screen w-full">
-        
-        {/* Header Progress Bar - Sáng 4 thanh (bước cuối nhánh du học) */}
         <div className="flex justify-around px-16 pt-[50px] gap-2 shrink-0 relative z-0">
           <div className="h-2 flex-1 bg-[#003570] rounded-full shadow-sm"></div>
           <div className="h-2 flex-1 bg-[#003570] rounded-full shadow-sm"></div>
@@ -93,46 +122,41 @@ const Quiz2_3Page = () => {
           <div className="h-2 flex-1 bg-[#003570] rounded-full shadow-sm"></div>
         </div>
 
-        {/* Mascot Area - Mascot Xách Vali Du Học */}
         <div className="flex justify-center items-end pt-12 -mb-8 relative z-0 pointer-events-none">
           <div className="w-56 md:w-64">
              <img src={mascotStudyAbroadImg} className="w-full h-auto object-contain drop-shadow-lg" alt="mascot du học" />
           </div>
         </div>
 
-        {/* Form Container */}
         <div className="flex-1 px-4 pb-12 relative z-10 flex flex-col justify-start">
-          <div className="bg-white/95 backdrop-blur-md rounded-[35px] shadow-2xl p-6 pb-8 flex flex-col border border-white">
+          <div className="bg-white/95 backdrop-blur-md rounded-[35px] shadow-2xl p-6 pb-8 flex flex-col border border-white h-full">
             
-            {/* Box Câu hỏi (Glassmorphism) */}
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-6 shadow-inner mb-8 flex items-center justify-center min-h-[110px]">
               <h2 className="text-[22px] md:text-[26px] font-black text-[#11397b] text-center leading-tight tracking-tighter px-2 drop-shadow-sm">
                 Quốc gia và ngành học<br/>bạn quan tâm là gì?
               </h2>
             </div>
 
-            {/* Form Fields Area */}
             <div className="flex flex-col gap-5 overflow-visible">
               
-              {/* Dropdown 1: Quốc Gia (Cho phép nhập hoặc chọn) */}
               <fieldset className="border-2 border-[#11397b] rounded-xl px-3 pb-1 relative bg-white z-50">
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Quốc Gia</legend>
                 <input 
                   type="text"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
+                  value={studyCountry}
+                  onChange={(e) => setStudyCountry(e.target.value)}
                   onClick={toggleCountry}
                   placeholder="Mỹ, Nhật Bản,..." 
                   className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-8 relative z-10" 
                 />
-                <SolidCaret isOpen={isCountryOpen} onClick={() => setIsCountryOpen(!isCountryOpen)} />
+                <SolidCaret isOpen={isCountryOpen} onClick={toggleCountry} />
                 
                 {isCountryOpen && (
                   <ul className="absolute left-0 right-0 top-[110%] bg-white border-2 border-[#11397b] rounded-xl shadow-xl max-h-48 overflow-y-auto z-[99]">
                     {countryOptions.map((opt, idx) => (
                       <li 
                         key={idx} 
-                        onClick={() => { setCountry(opt); setIsCountryOpen(false); }}
+                        onClick={() => { setStudyCountry(opt); setIsCountryOpen(false); }}
                         className="px-4 py-2 text-[#11397b] font-medium hover:bg-slate-100 cursor-pointer border-b border-gray-100 last:border-none"
                       >
                         {opt}
@@ -142,7 +166,6 @@ const Quiz2_3Page = () => {
                 )}
               </fieldset>
 
-              {/* Dropdown 2: Ngành học (Cho phép nhập hoặc chọn) */}
               <fieldset className="border-2 border-[#11397b] rounded-xl px-3 pb-1 relative bg-white z-40">
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Ngành học</legend>
                 <input 
@@ -153,7 +176,7 @@ const Quiz2_3Page = () => {
                   placeholder="Kinh tế, Kĩ thuật" 
                   className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-8 relative z-10" 
                 />
-                <SolidCaret isOpen={isMajorOpen} onClick={() => setIsMajorOpen(!isMajorOpen)} />
+                <SolidCaret isOpen={isMajorOpen} onClick={toggleMajor} />
                 
                 {isMajorOpen && (
                   <ul className="absolute left-0 right-0 top-[110%] bg-white border-2 border-[#11397b] rounded-xl shadow-xl max-h-48 overflow-y-auto z-[99]">
@@ -170,7 +193,6 @@ const Quiz2_3Page = () => {
                 )}
               </fieldset>
 
-              {/* Nút Ghi nhận */}
               <button 
                 onClick={handleRecord}
                 className="w-full py-4 bg-[#003570] text-white text-lg font-bold rounded-2xl shadow-xl active:scale-95 transition-all mt-4 relative z-10"
@@ -181,10 +203,8 @@ const Quiz2_3Page = () => {
             </div>
           </div>
         </div>
-
       </div>
 
-      {/* Hộp thoại xác nhận */}
       <Modal
         visible={isConfirmVisible}
         title="Xác nhận"
@@ -193,7 +213,7 @@ const Quiz2_3Page = () => {
       >
         <div className="text-center mb-6 text-[#11397b] font-medium text-base">
           Bạn chắc chắn muốn du học tại <br/>
-          <span className="font-bold text-lg text-[#ff4d4f]">{country}</span> <br/>
+          <span className="font-bold text-lg text-[#ff4d4f]">{studyCountry}</span> <br/>
           ngành <span className="font-bold text-lg text-[#ff4d4f]">{major}</span> chứ?
         </div>
         <div className="flex gap-3">
@@ -211,7 +231,6 @@ const Quiz2_3Page = () => {
           </button>
         </div>
       </Modal>
-
     </Page>
   );
 };
