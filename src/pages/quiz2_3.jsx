@@ -2,7 +2,7 @@ import React from "react";
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 import { useFormState, globalFormMemory } from "../hooks/useFormState";
 
-import mascotStudyAbroadImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotStudyAbroadImg from "../static/images/Mascot Hito_2 3.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz2_3Page = () => {
@@ -123,7 +123,7 @@ const Quiz2_3Page = () => {
         </div>
 
         <div className="flex justify-center items-end pt-12 -mb-8 relative z-0 pointer-events-none">
-          <div className="w-56 md:w-64">
+          <div className="w-64 md:w-72">
              <img src={mascotStudyAbroadImg} className="w-full h-auto object-contain drop-shadow-lg" alt="mascot du học" />
           </div>
         </div>
@@ -133,7 +133,7 @@ const Quiz2_3Page = () => {
             
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-6 shadow-inner mb-8 flex items-center justify-center min-h-[110px]">
               <h2 className="text-[22px] md:text-[26px] font-black text-[#11397b] text-center leading-tight tracking-tighter px-2 drop-shadow-sm">
-                Quốc gia và ngành học<br/>bạn quan tâm là gì?
+                Quốc gia <br /> và ngành học<br/>bạn quan tâm là gì?
               </h2>
             </div>
 

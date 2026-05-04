@@ -4,7 +4,9 @@ import { Page, Icon, useNavigate } from "zmp-ui";
 // IMPORT HÀM LƯU TRỮ VÀO ĐÂY
 import { useFormState } from "../hooks/useFormState";
 
-import mascotImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotImg from "../static/images/Mascot Hito_9 1.png";
+import mascotImg1 from "../static/images/Mascot Hito_1 7.png";
+import mascotImg2 from "../static/images/Mascot Hito_8 1.png";
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz1Page = () => {
@@ -111,8 +113,8 @@ const Quiz1Page = () => {
 
         {/* Mascot */}
         <div className="flex justify-center items-end pt-6 -mb-8 relative z-0 pointer-events-none">
-          <div className="w-36 translate-x-4"><img src={mascotImg} className="w-full h-auto drop-shadow-lg" alt="mascot" /></div>
-          <div className="w-36 -translate-x-4"><img src={mascotImg} className="w-full h-auto scale-x-[-1] drop-shadow-lg" alt="mascot" /></div>
+          <div className="w-40 translate-x-4"><img src={mascotImg1} className="w-full h-auto drop-shadow-lg" alt="mascot" /></div>
+          <div className="w-40 -translate-x-4"><img src={mascotImg2} className="w-full h-auto scale-x-[-1] drop-shadow-lg" alt="mascot" /></div>
         </div>
 
         <div className="flex-1 px-4 pb-4 relative z-10 flex flex-col">

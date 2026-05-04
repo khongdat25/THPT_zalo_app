@@ -2,7 +2,7 @@ import React from "react";
 import { Page, useNavigate, Icon } from "zmp-ui";
 
 // Lưu ý: Thay đổi tên file hình ảnh mascot tung hoa giấy cho phù hợp với dự án
-import mascotThanksImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotThanksImg from "../static/images/arigato.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 // ================= NHÚNG CÁC ICON CỦA BẠN VÀO ĐÂY =================
@@ -57,7 +57,7 @@ const ThanksPage = () => {
         </div>
 
         <h1 className="text-[36px] md:text-[40px] font-black text-[#11397b] text-center leading-tight tracking-tighter mb-8 uppercase drop-shadow-md">
-          Bạn đã hoàn thành!
+          Bạn đã <br /> hoàn thành!
         </h1>
 
         <div className="flex flex-col gap-4 w-full px-2">

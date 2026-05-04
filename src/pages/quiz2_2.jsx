@@ -1,10 +1,8 @@
-  // Nhớ import globalFormMemory từ file hook của bạn
 import { useFormState, globalFormMemory } from "../hooks/useFormState";
-
 import React, { useState } from "react";
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 // Lưu ý: Đổi tên file ảnh mascot đội mũ cử nhân cho đúng với source của bạn
-import mascotGradImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotGradImg from "../static/images/Mascot Hito_2 1.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz2_2Page = () => {
@@ -32,53 +30,46 @@ const Quiz2_2Page = () => {
     setIsConfirmVisible(true);
   };
 
+  const handleConfirm = async () => {
+    setIsConfirmVisible(false);
 
-// ... (code UI giữ nguyên)
+    // 1. Gom toàn bộ dữ liệu từ các bước trước
+    const payload = {
+      name: globalFormMemory["q1_name"] || "",
+      email: globalFormMemory["q1_email"] || "",
+      gender: globalFormMemory["q1_gender"] || "",
+      province: globalFormMemory["q1_province"] || "",
+      school: globalFormMemory["q1_school"] || "",
+      className: globalFormMemory["q1_class"] || "",
+      selectedBlock: globalFormMemory["selectedBlock"] || "",
+      pathway: "Trong nước", 
+      eduSystem: eduSystem,  
+      major: major,
+      phone: globalFormMemory["user_phone"] || "0987654321", 
+    };
 
-const handleConfirm = async () => {
-  setIsConfirmVisible(false);
+    try {
+      // ĐÃ FIX: Chuyển về Domain của Server công ty để điện thoại không bị báo lỗi
+      const response = await fetch("https://api.hto.edu.vn/api/khao-sat/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-  // 1. Gom toàn bộ dữ liệu từ các bước trước
-  const payload = {
-    name: globalFormMemory["q1_name"] || "",
-    email: globalFormMemory["q1_email"] || "",
-    gender: globalFormMemory["q1_gender"] || "",
-    province: globalFormMemory["q1_province"] || "",
-    school: globalFormMemory["q1_school"] || "",
-    className: globalFormMemory["q1_class"] || "",
-    selectedBlock: globalFormMemory["selectedBlock"] || "",
-    pathway: "Trong nước", // Đổi thành "Du học" nếu ở trang quiz2_3
-    eduSystem: eduSystem,  // Đổi thành country nếu ở trang quiz2_3
-    major: major,
-    
-    // ĐẶC BIỆT LƯU Ý: Phải truyền số điện thoại vào đây. 
-    // Giả sử bạn đã gọi API lấy SĐT Zalo ở trang trước và lưu vào formState tên là "user_phone"
-    phone: globalFormMemory["user_phone"] || "0987654321", // Thay chuỗi cứng này bằng biến chứa SĐT thật của bạn
-  };
+      const result = await response.json();
 
-  try {
-    // 2. Gọi API đến Backend Node.js của bạn (Thay URL thành Domain BE thật của bạn)
-    const response = await fetch("http://localhost:3003/api/khao-sat/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      // Thành công -> Chuyển sang trang Cảm ơn
-      navigate("/thanks");
-    } else {
-      alert("Lỗi: " + result.message);
+      if (result.success) {
+        navigate("/thanks");
+      } else {
+        alert("Lỗi: " + result.message);
+      }
+    } catch (error) {
+      alert("Không thể kết nối đến máy chủ Backend!");
+      console.error(error);
     }
-  } catch (error) {
-    alert("Không thể kết nối đến máy chủ Backend!");
-    console.error(error);
-  }
-};
+  };
 
   // SVG Icon Tam giác Dropdown
   const SolidCaret = ({ isOpen, onClick }) => (
@@ -152,7 +143,7 @@ const handleConfirm = async () => {
             {/* Box Câu hỏi (Glassmorphism) */}
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-6 shadow-inner mb-8 flex items-center justify-center min-h-[110px]">
               <h2 className="text-[22px] md:text-[24px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
-                Bạn chọn hệ đào tạo nào,<br/>ngành bạn quan tâm là gì?
+                Bạn chọn <br /> hệ đào tạo nào,<br/>ngành bạn quan tâm <br />là gì?
               </h2>
             </div>
 
@@ -238,7 +229,7 @@ const handleConfirm = async () => {
             </div>
             {/* Box Text Trong suốt */}
             <div className="flex-1 bg-white/30 backdrop-blur-xl py-[14px] px-4 rounded-r-xl border border-white/50 text-white font-medium text-[15px] ml-[-2px] tracking-wide text-center">
-              0866 934 579 <span className="opacity-70 mx-1">-</span> 0334 585 198
+              Liên hệ tại: <span className="opacity-70 mx-1"></span>1800 9078
             </div>
           </div>
         </div>

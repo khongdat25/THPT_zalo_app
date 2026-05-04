@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // Đã thêm Icon vào phần import
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 import { useFormState } from "../hooks/useFormState";
-import mascotImg from "../static/images/Mascot Hito_9 1.png"; 
+import mascotImg from "../static/images/Mascot Hito_10 2.png"; 
 import bgIndex from "../static/images/bg_home1.png"; 
 
 const Quiz2Page = () => {
@@ -30,7 +30,7 @@ const Quiz2Page = () => {
     <Page className="relative p-0 m-0 overflow-hidden font-['Be_Vietnam_Pro'] min-h-screen flex flex-col">
       
       {/* Background Image */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute -inset-10 -z-10">
         <img src={bgIndex} alt="Background" className="w-full h-full object-cover" />
       </div>
 

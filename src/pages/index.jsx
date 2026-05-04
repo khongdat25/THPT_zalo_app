@@ -33,7 +33,7 @@ const HomePage = () => {
         if (token) {
           // 2. Bắn token xuống Backend Node.js để giải mã
           // LƯU Ý: Đổi "https://domain-backend-cua-ban.com" thành link thật của Backend
-          const response = await fetch("https://domain-backend-cua-ban.com/decode-phone", {
+          const response = await fetch("https://api.hto.edu.vn/get-phone", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -78,12 +78,12 @@ const HomePage = () => {
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center px-8">
-          <div className="w-[70%] max-w-[260px] aspect-square flex items-center justify-center">
+          <div className="w-[80%] max-w-[260px] aspect-square flex items-center justify-center">
              <img src={mascotImg} alt="Mascot" className="w-full h-full object-contain" />
           </div>
 
-          <h1 className="mt-6 text-[34px] md:text-[40px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
-            Khảo Sát Cùng Hito
+          <h1 className="mt-6 text-[38px] md:text-[40px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
+            Khảo Sát <br /> Cùng Hito
           </h1>
 
           <button onClick={() => navigate("/quiz1")} className="mt-8 w-full max-w-[320px] py-4 bg-[#003570] text-white text-lg font-bold rounded-2xl shadow-xl active:scale-95 transition-all">
