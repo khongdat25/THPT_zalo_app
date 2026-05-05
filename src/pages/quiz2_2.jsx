@@ -2,12 +2,12 @@ import { useFormState, globalFormMemory } from "../hooks/useFormState";
 import React, { useState } from "react";
 import { Page, useNavigate, Modal, Icon } from "zmp-ui";
 // Lưu ý: Đổi tên file ảnh mascot đội mũ cử nhân cho đúng với source của bạn
-import mascotGradImg from "../static/images/Mascot Hito_2 1.png"; 
-import bgIndex from "../static/images/bg_home1.png"; 
+import mascotGradImg from "../static/images/Mascot Hito_2 1.png";
+import bgIndex from "../static/images/bg_home1.png";
 
 const Quiz2_2Page = () => {
   const navigate = useNavigate();
-  
+
   // --- States cho Hệ đào tạo ---
   const [eduSystem, setEduSystem] = useFormState("eduSystem", "");
   const [isEduOpen, setIsEduOpen] = useFormState("isEduOpen", false);
@@ -35,6 +35,7 @@ const Quiz2_2Page = () => {
 
     // 1. Gom toàn bộ dữ liệu từ các bước trước
     const payload = {
+      sheet_name: "KHAO_SAT_HITO_V1",
       name: globalFormMemory["q1_name"] || "",
       email: globalFormMemory["q1_email"] || "",
       gender: globalFormMemory["q1_gender"] || "",
@@ -42,11 +43,15 @@ const Quiz2_2Page = () => {
       school: globalFormMemory["q1_school"] || "",
       className: globalFormMemory["q1_class"] || "",
       selectedBlock: globalFormMemory["selectedBlock"] || "",
-      pathway: "Trong nước", 
-      eduSystem: eduSystem,  
+      pathway: "Trong nước",
+      eduSystem: eduSystem,
       major: major,
       phone: globalFormMemory["user_phone"] || "",
     };
+
+    console.log("📤 [Quiz2_2] Payload gửi đi:", JSON.stringify(payload, null, 2));
+    console.log("🎯 Pathway:", payload.pathway);
+    console.log("🎯 Sheet_name:", payload.sheet_name);
 
     try {
       // ĐÃ FIX: Chuyển về Domain của Server công ty để điện thoại không bị báo lỗi
@@ -59,31 +64,34 @@ const Quiz2_2Page = () => {
       });
 
       const result = await response.json();
+      console.log("📥 [Quiz2_2] Response từ server:", result);
+      console.log("💾 Bảng lưu vào:", result.sheet || "Không xác định");
 
       if (result.success) {
+        console.log("✅ Gửi thành công! Lưu vào:", result.sheet);
         navigate("/thanks");
       } else {
         alert("Lỗi: " + result.message);
       }
     } catch (error) {
       alert("Không thể kết nối đến máy chủ Backend!");
-      console.error(error);
+      console.error("❌ [Quiz2_2] Lỗi gửi dữ liệu:", error);
     }
   };
 
   // SVG Icon Tam giác Dropdown
   const SolidCaret = ({ isOpen, onClick }) => (
-    <div 
+    <div
       className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center cursor-pointer z-20"
       onClick={onClick}
     >
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        className={`w-3 h-3 text-[#11397b] transition-transform duration-300 mt-2 ${isOpen ? "rotate-180" : ""}`} 
-        viewBox="0 0 320 512" 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={`w-3 h-3 text-[#11397b] transition-transform duration-300 mt-2 ${isOpen ? "rotate-180" : ""}`}
+        viewBox="0 0 320 512"
         fill="currentColor"
       >
-        <path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/>
+        <path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z" />
       </svg>
     </div>
   );
@@ -94,7 +102,7 @@ const Quiz2_2Page = () => {
 
   return (
     <Page className="relative p-0 m-0 overflow-hidden font-['Be_Vietnam_Pro'] min-h-screen flex flex-col">
-      
+
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <img src={bgIndex} alt="Background" className="w-full h-full object-cover" />
@@ -103,16 +111,16 @@ const Quiz2_2Page = () => {
       {/* ================= NÚT ĐIỀU HƯỚNG NỔI ================= */}
       <div className="absolute top-[42px] left-0 w-full px-4 flex justify-between z-[100]">
         {/* Nút Trở về */}
-        <div 
-          onClick={() => navigate(-1)} 
+        <div
+          onClick={() => navigate(-1)}
           className="w-10 h-10 bg-white/70 backdrop-blur-md shadow-sm border border-white/50 rounded-full flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
         >
           <Icon icon="zi-chevron-left" className="text-[#11397b] text-xl font-black pr-0.5" />
         </div>
 
         {/* Nút Tiếp theo (Gọi hàm handleRecord để validate trước khi đi tiếp) */}
-        <div 
-          onClick={handleRecord} 
+        <div
+          onClick={handleRecord}
           className="w-10 h-10 bg-white/70 backdrop-blur-md shadow-sm border border-white/50 rounded-full flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
         >
           <Icon icon="zi-chevron-right" className="text-[#11397b] text-xl font-black pl-0.5" />
@@ -120,7 +128,7 @@ const Quiz2_2Page = () => {
       </div>
 
       <div className="flex flex-col h-screen w-full">
-        
+
         {/* Header Progress Bar - Sáng 4 thanh (bước cuối). Đã chỉnh px-16 và pt-[50px] */}
         <div className="flex justify-around px-16 pt-[50px] gap-2 shrink-0 relative z-0">
           <div className="h-2 flex-1 bg-[#003570] rounded-full shadow-sm"></div>
@@ -132,42 +140,42 @@ const Quiz2_2Page = () => {
         {/* Mascot Area - Mascot Cử nhân */}
         <div className="flex justify-center items-end pt-12 -mb-8 relative z-0 pointer-events-none">
           <div className="w-48 md:w-56">
-             <img src={mascotGradImg} className="w-full h-auto object-contain drop-shadow-lg" alt="mascot cử nhân" />
+            <img src={mascotGradImg} className="w-full h-auto object-contain drop-shadow-lg" alt="mascot cử nhân" />
           </div>
         </div>
 
         {/* Form Container - ĐÃ SỬA Z-INDEX LÊN CAO NHẤT (z-[60]) ĐỂ KHÔNG BỊ KHỐI HOTLINE CHE */}
         <div className="flex-1 px-4 pb-4 relative z-[60] flex flex-col justify-start">
           <div className="bg-white/95 backdrop-blur-md rounded-[35px] shadow-2xl p-6 pb-8 flex flex-col border border-white">
-            
+
             {/* Box Câu hỏi (Glassmorphism) */}
             <div className="bg-gradient-to-b from-[#e2ebf5]/80 to-[#ffffff]/90 backdrop-blur-sm border border-white rounded-3xl p-6 shadow-inner mb-8 flex items-center justify-center min-h-[110px]">
               <h2 className="text-[22px] md:text-[24px] font-black text-[#11397b] text-center leading-tight tracking-tighter drop-shadow-sm">
-                Bạn chọn <br /> hệ đào tạo nào,<br/>ngành bạn quan tâm <br />là gì?
+                Bạn chọn <br /> hệ đào tạo nào,<br />ngành bạn quan tâm <br />là gì?
               </h2>
             </div>
 
             {/* Form Fields Area */}
             <div className="flex flex-col gap-5 overflow-visible">
-              
+
               {/* Dropdown 1: Hệ đào tạo (Chỉ chọn, không nhập) */}
               <fieldset className="border-2 border-[#11397b] rounded-xl px-3 pb-1 relative bg-white z-50">
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Hệ đào tạo</legend>
                 <div className="absolute inset-0 top-3 cursor-pointer z-10" onClick={toggleEdu}></div>
-                <input 
+                <input
                   type="text"
                   value={eduSystem}
                   readOnly
-                  placeholder="Cao đẳng, đại học, nghề,..." 
-                  className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-6 relative z-0 pointer-events-none" 
+                  placeholder="Cao đẳng, đại học, nghề,..."
+                  className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-6 relative z-0 pointer-events-none"
                 />
                 <SolidCaret isOpen={isEduOpen} onClick={toggleEdu} />
-                
+
                 {isEduOpen && (
                   <ul className="absolute left-0 right-0 top-[110%] bg-white border-2 border-[#11397b] rounded-xl shadow-xl max-h-48 overflow-y-auto z-[99]">
                     {eduOptions.map((opt, idx) => (
-                      <li 
-                        key={idx} 
+                      <li
+                        key={idx}
                         onClick={() => { setEduSystem(opt); setIsEduOpen(false); }}
                         className="px-4 py-2 text-[#11397b] font-medium hover:bg-slate-100 cursor-pointer border-b border-gray-100 last:border-none"
                       >
@@ -181,21 +189,21 @@ const Quiz2_2Page = () => {
               {/* Dropdown 2: Ngành học (Vừa chọn vừa nhập) */}
               <fieldset className="border-2 border-[#11397b] rounded-xl px-3 pb-1 relative bg-white z-40">
                 <legend className="text-[#11397b] font-bold px-2 ml-2 text-xs">Ngành học</legend>
-                <input 
+                <input
                   type="text"
                   value={major}
                   onChange={(e) => setMajor(e.target.value)}
                   onClick={toggleMajor}
-                  placeholder="Kinh tế, IT, điện,..." 
-                  className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-8 relative z-10" 
+                  placeholder="Kinh tế, IT, điện,..."
+                  className="w-full bg-transparent outline-none text-[#11397b] font-medium py-1 pr-8 relative z-10"
                 />
                 <SolidCaret isOpen={isMajorOpen} onClick={() => setIsMajorOpen(!isMajorOpen)} />
-                
+
                 {isMajorOpen && (
                   <ul className="absolute left-0 right-0 top-[110%] bg-white border-2 border-[#11397b] rounded-xl shadow-xl max-h-48 overflow-y-auto z-[99]">
                     {majorOptions.map((opt, idx) => (
-                      <li 
-                        key={idx} 
+                      <li
+                        key={idx}
                         onClick={() => { setMajor(opt); setIsMajorOpen(false); }}
                         className="px-4 py-2 text-[#11397b] font-medium hover:bg-slate-100 cursor-pointer border-b border-gray-100 last:border-none"
                       >
@@ -207,7 +215,7 @@ const Quiz2_2Page = () => {
               </fieldset>
 
               {/* Nút Ghi nhận */}
-              <button 
+              <button
                 onClick={handleRecord}
                 className="w-full py-4 bg-[#003570] text-white text-lg font-bold rounded-2xl shadow-xl active:scale-95 transition-all mt-2 relative z-10"
               >
@@ -225,7 +233,7 @@ const Quiz2_2Page = () => {
             {/* Box Icon Hồng: Gắn shrink-0 và định rộng cố định để không vỡ khung */}
             <div className="bg-[#ffadad] w-[60px] shrink-0 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-[22px] h-[22px] text-white drop-shadow-sm" fill="currentColor" viewBox="0 0 512 512">
-                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
               </svg>
             </div>
             {/* Box Text: Đổi nền trắng đục hơn, chữ xanh đậm dễ đọc, số điện thoại nổi bật */}
@@ -247,18 +255,18 @@ const Quiz2_2Page = () => {
         verticalActions
       >
         <div className="text-center mb-6 text-[#11397b] font-medium text-base">
-          Bạn chắc chắn muốn chọn <br/>
-          <span className="font-bold text-lg text-[#ff4d4f]">{eduSystem}</span> <br/>
+          Bạn chắc chắn muốn chọn <br />
+          <span className="font-bold text-lg text-[#ff4d4f]">{eduSystem}</span> <br />
           ngành <span className="font-bold text-lg text-[#ff4d4f]">{major}</span> chứ?
         </div>
         <div className="flex gap-3">
-          <button 
+          <button
             className="flex-1 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl active:scale-95 transition-transform"
             onClick={() => setIsConfirmVisible(false)}
           >
             Hủy
           </button>
-          <button 
+          <button
             className="flex-1 py-3 bg-[#003570] text-white font-bold rounded-xl active:scale-95 transition-transform"
             onClick={handleConfirm}
           >
